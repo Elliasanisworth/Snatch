@@ -1,0 +1,121 @@
+<%- include('./partials/header') %>
+
+<div class="w-full h-auto flex flex-col px-20 py-10 gap-10">
+    <!-- Product Cards Section -->
+    <div class="flex flex-wrap gap-5">
+        <% user.cart.forEach(function(item, index){ %>
+            <div class="w-[23%] bg-white rounded-md overflow-hidden shadow-lg">
+                <div class="w-full h-64 bg-yellow-500 flex items-center justify-center">
+                    <!-- Placeholder for Product Image -->
+                    <img class="h-32 object-contain" src="data:image/jpeg;base64,<%= item.image.toString('base64') %>" alt="">
+                </div>
+                <div class="w-full flex justify-between px-4 py-2">
+                    <h3 class="text-xl font-semibold"><%= item.name %></h3>
+                    <div class="flex items-center gap-2">
+                        <button class="w-7 h-7 bg-white flex rounded-full items-center justify-center shadow hover:bg-gray-200">
+                            <span class="iconify" data-icon="ri:add-line" data-inline="false"></span>
+                        </button>
+                        <div class="px-2 py-1 rounded-md bg-white text-black shadow">01</div>
+                        <button class="w-7 h-7 bg-white flex rounded-full items-center justify-center shadow hover:bg-gray-200">
+                            <span class="iconify" data-icon="ri:subtract-line" data-inline="false"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between px-4 py-2 bg-gray-50">
+                    <h4 class="text-md font-medium">Net Total</h4>
+                    <h2 class="text-md font-semibold">₹ <%= item.price %> </h2>
+                </div>
+                <!-- Individual Price Breakdown Section -->
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold mb-2">Price Breakdown</h3>
+                    <div class="mt-2">
+                        <div class="flex justify-between mt-2">
+                            <h4 class="w-1/3 text-gray-700">Total MRP</h4>
+                            <h4 class="text-gray-900">₹ <%= item.price %> </h4>
+                        </div>
+                        <div class="flex justify-between mt-2">
+                            <h4 class="w-1/3 text-gray-700">Discount on MRP</h4>
+                            <h4 class="text-gray-900">₹ <%= Number(item.discount) %> </h4>
+                        </div>
+                        <div class="flex justify-between mt-2">
+                            <h4 class="w-1/3 text-gray-700">Platform Fee</h4>
+                            <h4 class="text-gray-900">₹ 20</h4>
+                        </div>
+                        <div class="flex justify-between mt-2">
+                            <h4 class="w-1/3 text-gray-700">Shipping Fee</h4>
+                            <h4 class="text-gray-900">FREE</h4>
+                        </div>
+                        <div class="w-full h-[1px] bg-gray-300 mt-4"></div>
+                        <div class="flex justify-between mt-2">
+                            <h3 class="w-1/3 text-md font-semibold">Total Amount</h3>
+                            <h3 class="font-semibold text-md text-green-600">₹ <%= item.price - Number(item.discount) + 20 %> </h3>
+                        </div>
+                    </div>
+                    <div class="flex justify-end mt-4">
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Proceed to Buy</button>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+
+    <!-- Button to Show Total Payment Breakdown -->
+    <div class="flex justify-center mt-10">
+        <button onclick="showTotalBreakdown()" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-8 rounded-full shadow-lg">All at Once</button>
+    </div>
+</div>
+
+<!-- Modal for Total Payment Breakdown -->
+<div id="totalBreakdownModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white rounded-lg shadow-2xl p-8 w-2/3 h-3/4 overflow-auto">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-2xl font-semibold">Total Payment Breakdown</h3>
+            <button onclick="closeTotalBreakdown()" class="text-gray-500 hover:text-gray-700">
+                <span class="iconify" data-icon="ri:close-line" data-inline="false"></span>
+            </button>
+        </div>
+        <div class="px-10 mt-5">
+            <div class="flex justify-between mt-2">
+                <h4 class="w-1/3 text-gray-700">Total MRP</h4>
+                <h4 class="text-gray-900">₹ <%= user.cart.reduce((total, item) => total + item.price, 0) %></h4>
+            </div>
+            <div class="flex justify-between mt-2">
+                <h4 class="w-1/3 text-gray-700">Discount on MRP</h4>
+                <h4 class="text-gray-900">₹ <%= user.cart.reduce((total, item) => total + Number(item.discount), 0) %></h4>
+            </div>
+            <div class="flex justify-between mt-2">
+                <h4 class="w-1/3 text-gray-700">Platform Fee</h4>
+                <h4 class="text-gray-900">₹ 20</h4>
+            </div>
+            <div class="flex justify-between mt-2">
+                <h4 class="w-1/3 text-gray-700">Shipping Fee</h4>
+                <h4 class="text-gray-900">FREE</h4>
+            </div>
+        </div>
+        <div class="w-full h-[1px] bg-gray-300 mt-10"></div>
+        <div class="flex justify-between mt-5">
+            <h3 class="w-1/3 text-xl font-semibold">Total Amount</h3>
+            <h3 class="font-semibold text-xl text-green-600">₹ <%= user.cart.reduce((total, item) => total + item.price - Number(item.discount), 0) + 20 %> </h3>
+        </div>
+        <div class="flex justify-end mt-6">
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Proceed to Buy</button>
+        </div>
+        <div class="flex justify-end mt-6">
+            <button onclick="closeTotalBreakdown()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Close</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showTotalBreakdown() {
+        document.getElementById('totalBreakdownModal').classList.remove('hidden');
+    }
+
+    function closeTotalBreakdown() {
+        document.getElementById('totalBreakdownModal').classList.add('hidden');
+    }
+</script>
+
+<%- include('./partials/footer') %>
+
+

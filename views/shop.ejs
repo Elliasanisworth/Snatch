@@ -1,0 +1,73 @@
+<%- include('./partials/header') %>
+
+<% if(success.length > 0) { %>
+    <div id="flash-message" class="flash-message fixed top-5 left-1/2 transform -translate-x-1/2 p-3 rounded-md bg-blue-500 shadow-lg">
+        <span class="inline-block text-white">
+            <%= success %>
+        </span>
+    </div>
+<% } %>
+
+<div class="flex items-start px-20 py-20">
+    <!-- Sidebar -->
+    <div class="w-1/4 flex flex-col items-start">
+        <div class="flex items-center mb-4">
+            <h3 class="mr-2">Sort by:</h3>
+            <form action="/shop">
+                <select class="border px-2 py-1 rounded">
+                    <option value="popular">Popular</option>
+                    <option value="newest">Newest</option>
+                </select>
+            </form>
+        </div>
+        <div class="flex flex-col space-y-4 ">
+            <a href="#" class="text-blcak-900 hover:text-blue-700">New Collection</a>
+            <a href="#" class="text-blcak-900 hover:text-blue-700 ">All Products</a>
+            <a href="#" class="text-blcak-900 hover:text-blue-700">Discounted Products</a>
+        </div>
+        <div class="mt-8 flex-row  ">
+            <span class="block mr-4">Filter by:</span>
+            <a href="#" class="text-black-900 hover:text-blue-700 mr-64">Availability</a>
+            <a href="#" class="text-black-900 hover:text-blue-700">Discount</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="w-3/4 flex flex-col gap-5">
+        <div class="flex flex-wrap gap-5">
+            <% product.forEach(function(product) { %>
+                <div class="w-60 bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="h-52 bg-[<%= product.bgcolor %>] flex items-center justify-center">
+                        <img class="h-32 object-contain" src="data:image/jpeg;base64,<%= product.image.toString('base64') %>" alt="">
+                    </div>
+                    <div class="px-4 py-3 bg-[<%= product.panelcolor %>] flex justify-between items-center text-[<%= product.textcolor %>]">
+                        <div>
+                            <h3 class="font-semibold"><%= product.name %></h3>
+                            <p class="text-sm">₹ <%= product.price %></p>
+                        </div>
+                        <a href="/addtocart/<%= product._id %>" class="w-7 h-7 flex items-center justify-center rounded-full bg-white">
+                            <i class="ri-add-line"></i>
+                        </a>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+</div>
+<script>
+    // JavaScript to make the flash message disappear after 5 seconds with a smooth fade-out animation
+    setTimeout(function() {
+        var flashMessage = document.getElementById('flash-message');
+        if (flashMessage) {
+            flashMessage.classList.add('hide');
+            // Optionally, remove the element from the DOM after the transition duration
+            setTimeout(function() {
+                if (flashMessage) {
+                    flashMessage.style.display = 'none';
+                }
+            }, 500); // Match this time to the transition duration
+        }
+    }, 5000); // 5000 milliseconds = 5 seconds
+</script>
+
+<%- include('./partials/footer') %>

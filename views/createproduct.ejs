@@ -1,0 +1,75 @@
+<%- include('./partials/header') %>
+
+<% if(success.length > 0) { %>
+    <div id="flash-message" class="flash-message fixed top-5 left-1/2 transform -translate-x-1/2 p-3 rounded-md bg-blue-500 shadow-lg">
+        <span class="inline-block text-white">
+            <%= success %>
+        </span>
+    </div>
+<% } %>
+
+<div class="min-h-screen flex flex-col bg-gray-100">
+    <div class="container mx-auto px-10 py-20 flex flex-grow">
+        <div class="w-1/4 flex h-screen flex-col items-start bg-white p-6 rounded-lg shadow-lg">
+            <div class="flex flex-col">
+                <a class="block mb-2 text-blue-600 hover:underline" href="">All Products</a>
+                <a class="block mb-2 text-blue-600 hover:underline" href="">Create new product</a>
+            </div>
+        </div>
+        <main class="w-3/4 bg-white p-8 rounded-lg shadow-lg ml-4">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">Create New Product</h2>
+            <form action="/product/create" method="post" enctype="multipart/form-data">
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold mb-2 text-gray-700">Product Details</h3>
+                    <div class="mb-4">
+                        <label class="block mb-2 font-medium text-gray-600">Product Image</label>
+                        <input name="image" type="file" class="py-2 px-4 rounded border border-gray-300 w-full">
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <input name="name" type="text" placeholder="Product Name" class="border p-2 rounded w-full border-gray-300">
+                        <input name="price" type="text" placeholder="Product Price" class="border p-2 rounded w-full border-gray-300">
+                        <input name="discount" type="text" placeholder="Discount Price" class="border p-2 rounded w-full border-gray-300">
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold mb-2 text-gray-700">Panel Details</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <input name="bgcolor" type="text" placeholder="Background Color" class="border p-2 rounded w-full border-gray-300">
+                        <input name="panelcolor" type="text" placeholder="Panel Color" class="border p-2 rounded w-full border-gray-300">
+                        <input name="textcolor" type="text" placeholder="Text Color" class="border p-2 rounded w-full border-gray-300">
+                    </div>
+                </div>
+                <input class="px-5 py-2 rounded bg-blue-500 text-white hover:bg-blue-600" type="submit" value="Create New Product">
+            </form>
+        </main>
+    </div>
+</div>
+
+<style>
+    .flash-message {
+        opacity: 1;
+        transition: opacity 0.5s ease-in-out;
+    }
+    .flash-message.hide {
+        opacity: 0;
+    }
+</style>
+
+<script>
+    // JavaScript to make the flash message disappear after 5 seconds with a smooth fade-out animation
+    setTimeout(function() {
+        var flashMessage = document.getElementById('flash-message');
+        if (flashMessage) {
+            flashMessage.classList.add('hide');
+            // Optionally, remove the element from the DOM after the transition duration
+            setTimeout(function() {
+                if (flashMessage) {
+                    flashMessage.style.display = 'none';
+                }
+            }, 500); // Match this time to the transition duration
+        }
+    }, 5000); // 5000 milliseconds = 5 seconds
+</script>
+
+<%- include('./partials/footer') %>
